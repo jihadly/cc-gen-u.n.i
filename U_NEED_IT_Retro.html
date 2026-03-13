@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U NEED IT - Retro CC Gen</title>
+    <style>
+        /* ===== RETRO PALETTE ===== */
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-panel: #16213e;
+            --border: #0f3460;
+            --accent: #e94560;
+            --accent-glow: #ff6b6b;
+            --text: #eaeaea;
+            --text-dim: #a0a0a0;
+            --success: #00d9ff;
+            --warning: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(180deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* ===== CRT EFFECT ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            border: 3px solid var(--border);
+            background: var(--bg-panel);
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .header::before,
+        .header::after {
+            content: '◆';
+            position: absolute;
+            top: 10px;
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        .header::before { left: 15px; }
+        .header::after { right: 15px; }
+
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 14px;
+            letter-spacing: 4px;
+        }
+
+        /* ===== PANELS ===== */
+        .panel {
+            background: var(--bg-panel);
+            border: 2px solid var(--border);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--border);
+            padding: 12px 20px;
+            font-weight: bold;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .panel-body {
+            padding: 25px;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-group.full {
+            flex: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+        }
+
+        input::placeholder {
+            color: #555;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 24px;
+            background: var(--bg-dark);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            background: var(--accent);
+            color: var(--bg-dark);
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-glow);
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.8);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* ===== CARDS DISPLAY ===== */
+        .cards-panel {
+            display: none;
+            border: 3px solid var(--success);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+        }
+
+        .cards-panel.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cards-header {
+            background: var(--border);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--success);
+        }
+
+        .cards-title {
+            color: var(--success);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .cards-count {
+            background: var(--bg-dark);
+            padding: 5px 15px;
+            border: 1px solid var(--success);
+            color: var(--success);
+            font-size: 14px;
+        }
+
+        .cards-box {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #0d0d1a;
+            padding: 20px;
+        }
+
+        .cards-box::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .cards-box::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        .cards-box::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 0;
+        }
+
+        .card-item {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .card-item:hover {
+            border-color: var(--accent);
+            background: rgba(233, 69, 96, 0.1);
+            transform: translateX(5px);
+        }
+
+        .card-number {
+            font-size: 18px;
+            color: var(--warning);
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .card-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .card-date {
+            color: var(--success);
+        }
+
+        .card-cvv {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .card-copy {
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--text-dim);
+            color: var(--text-dim);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card-copy:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== ACTIONS BAR ===== */
+        .actions-bar {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: var(--bg-dark);
+            border-top: 2px solid var(--border);
+        }
+
+        .actions-bar .btn {
+            flex: 1;
+        }
+
+        /* ===== TEXTAREA FOR RAW ===== */
+        .raw-output {
+            width: 100%;
+            min-height: 200px;
+            background: #0d0d1a;
+            border: 2px solid var(--border);
+            color: var(--warning);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 15px;
+            resize: vertical;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .raw-output.show {
+            display: block;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent);
+            color: var(--bg-dark);
+            padding: 15px 30px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            border: 2px solid var(--accent-glow);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== LOADING ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .loading-text {
+            color: var(--accent);
+            font-size: 18px;
+            letter-spacing: 4px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .logo { font-size: 28px; letter-spacing: 4px; }
+            .form-row { flex-direction: column; }
+            .card-item { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .card-info { width: 100%; justify-content: space-between; }
+            .actions-bar { flex-wrap: wrap; }
+            .actions-bar .btn { flex: 1 1 45%; }
+        }
+
+        /* ===== SCANLINE ANIMATION ===== */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: rgba(233, 69, 96, 0.1);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">U NEED IT</div>
+            <div class="subtitle">[ RETRO CARD GENERATOR v1.0 ]</div>
+        </div>
+
+        <!-- Configuration Panel -->
+        <div class="panel">
+            <div class="panel-header">◆ CONFIGURATION ◆</div>
+            <div class="panel-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Network</label>
+                        <select id="network">
+                            <option value="Random">Random</option>
+                            <option value="Visa">Visa</option>
+                            <option value="Mastercard">Mastercard</option>
+                            <option value="American Express">Amex</option>
+                            <option value="Discover">Discover</option>
+                            <option value="JCB">JCB</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label>BIN / Template (use X for random)</label>
+                        <input type="text" id="bin" placeholder="411111XXXXXX">
+                    </div>
+                    <div class="form-group" style="flex: 0;">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-small" onclick="randomBin()">RANDOM</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Month</label>
+                        <select id="month">
+                            <option value="RANDOM">RANDOM</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Year</label>
+                        <select id="year">
+                            <option value="RANDOM">RANDOM</option>
+                            <option value="26">2026</option>
+                            <option value="27">2027</option>
+                            <option value="28">2028</option>
+                            <option value="29">2029</option>
+                            <option value="30">2030</option>
+                            <option value="31">2031</option>
+                            <option value="32">2032</option>
+                            <option value="33">2033</option>
+                            <option value="34">2034</option>
+                            <option value="35">2035</option>
+                            <option value="36">2036</option>
+                            <option value="37">2037</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV (optional)</label>
+                        <input type="text" id="cvv" placeholder="RANDOM" maxlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="qty" value="10" min="1" max="100">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Output Format</label>
+                        <select id="format">
+                            <option value="PIPE">PIPE |</option>
+                            <option value="CARD">CARD /</option>
+                            <option value="SPACE">SPACE</option>
+                            <option value="CSV">CSV ,</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateCards()">
+                    [ GENERATE CARDS ]
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-text">&gt;&gt; PROCESSING... &lt;&lt;</div>
+        </div>
+
+        <!-- Cards Panel -->
+        <div class="panel cards-panel" id="cardsPanel">
+            <div class="cards-header">
+                <div class="cards-title">◆ GENERATED CARDS ◆</div>
+                <div class="cards-count" id="cardsCount">0 CARDS</div>
+            </div>
+            <div class="cards-box" id="cardsBox">
+                <div class="empty-state">
+                    <div class="empty-icon">💳</div>
+                    <div>Click GENERATE to create cards</div>
+                </div>
+            </div>
+            <div class="actions-bar">
+                <button class="btn" onclick="copyAll()">COPY ALL</button>
+                <button class="btn" onclick="saveTXT()">SAVE TXT</button>
+                <button class="btn" onclick="saveCSV()">SAVE CSV</button>
+                <button class="btn" onclick="toggleRaw()">VIEW RAW</button>
+                <button class="btn" onclick="clearCards()">CLEAR</button>
+            </div>
+            <textarea class="raw-output" id="rawOutput" readonly></textarea>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===== DATA =====
+        const customBins = [
+            "5154620057", "37936303", "374355122", "374355", "415464440695",
+            "3701940017", "374355129", "43476971032", "374355123", "426429",
+            "414709", "423810", "45382616", "374355124", "559888039288",
+            "5275150080", "37748133", "379795", "483312019643", "5598880398",
+            "411697707130", "426684", "4312316013"
+        ];
+
+        const networks = {
+            "Random": null,
+            "Visa": "4",
+            "Mastercard": "51",
+            "American Express": "34",
+            "Discover": "6011",
+            "JCB": "3530"
+        };
+
+        let generatedCards = [];
+        let rawCards = [];
+
+        // ===== UTILS =====
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function generateLuhn(partial) {
+            const digits = partial.split('').map(Number);
+            let sum = 0;
+            let alternate = false;
+
+            for (let i = digits.length - 1; i >= 0; i--) {
+                let n = digits[i];
+                if (alternate) {
+                    n *= 2;
+                    if (n > 9) n -= 9;
+                }
+                sum += n;
+                alternate = !alternate;
+            }
+
+            return (10 - (sum % 10)) % 10;
+        }
+
+        function randomBin() {
+            const bin = customBins[Math.floor(Math.random() * customBins.length)];
+            document.getElementById('bin').value = bin;
+            showToast('Random BIN: ' + bin);
+        }
+
+        // ===== GENERATE =====
+        function generateCards() {
+            const loading = document.getElementById('loading');
+            const cardsPanel = document.getElementById('cardsPanel');
+
+            loading.classList.add('show');
+            cardsPanel.classList.remove('show');
+
+            // Get values
+            const network = document.getElementById('network').value;
+            const binTemplate = document.getElementById('bin').value.toUpperCase();
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            const cvvInput = document.getElementById('cvv').value;
+            const qty = parseInt(document.getElementById('qty').value) || 10;
+            const format = document.getElementById('format').value;
+
+            // Determine card specs
+            let cardLength = 16;
+            let cvvLength = 3;
+
+            if (network === 'American Express') {
+                cardLength = 15;
+                cvvLength = 4;
+            } else if (network === 'Random' && binTemplate.startsWith('3')) {
+                cardLength = 15;
+                cvvLength = 4;
+            }
+
+            // Generate
+            rawCards = [];
+            generatedCards = [];
+
+            for (let i = 0; i < qty; i++) {
+                // Build number
+                let num = '';
+                const template = binTemplate || networks[network] || '4';
+
+                for (let char of template) {
+                    if (char === 'X' || char === '?') {
+                        num += Math.floor(Math.random() * 10);
+                    } else {
+                        num += char;
+                    }
+                }
+
+                // Pad to length
+                while (num.length < cardLength - 1) {
+                    num += Math.floor(Math.random() * 10);
+                }
+                num = num.substring(0, cardLength - 1);
+
+                // Add Luhn
+                const checkDigit = generateLuhn(num);
+                const cardNum = num + checkDigit;
+
+                // Date
+                const cardMonth = month === 'RANDOM' 
+                    ? String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')
+                    : month;
+                const cardYear = year === 'RANDOM'
+                    ? String(Math.floor(Math.random() * 12) + 26).padStart(2, '0')
+                    : year;
+
+                // CVV
+                const cardCVV = cvvInput 
+                    ? cvvInput 
+                    : String(Math.floor(Math.random() * Math.pow(10, cvvLength))).padStart(cvvLength, '0');
+
+                const card = {
+                    number: cardNum,
+                    month: cardMonth,
+                    year: cardYear,
+                    cvv: cardCVV
+                };
+
+                rawCards.push(card);
+
+                // Format
+                let line = '';
+                switch(format) {
+                    case 'PIPE':
+                        line = `${cardNum}|${cardMonth}|${cardYear}|${cardCVV}`;
+                        break;
+                    case 'CARD':
+                        line = `${cardNum} ${cardMonth}/${cardYear} ${cardCVV}`;
+                        break;
+                    case 'SPACE':
+                        line = `${cardNum} | ${cardMonth} | ${cardYear} | ${cardCVV}`;
+                        break;
+                    case 'CSV':
+                        line = `${cardNum},${cardMonth},${cardYear},${cardCVV}`;
+                        break;
+                }
+                generatedCards.push(line);
+            }
+
+            // Display
+            setTimeout(() => {
+                displayCards();
+                loading.classList.remove('show');
+                showToast(`Generated ${qty} cards!`);
+            }, 500);
+        }
+
+        function displayCards() {
+            const panel = document.getElementById('cardsPanel');
+            const box = document.getElementById('cardsBox');
+            const count = document.getElementById('cardsCount');
+            const rawOutput = document.getElementById('rawOutput');
+
+            count.textContent = `${rawCards.length} CARDS`;
+
+            box.innerHTML = '';
+            rawCards.forEach((card, idx) => {
+                const item = document.createElement('div');
+                item.className = 'card-item';
+                item.innerHTML = `
+                    <div class="card-number">${card.number}</div>
+                    <div class="card-info">
+                        <span class="card-date">${card.month}/${card.year}</span>
+                        <span class="card-cvv">${card.cvv}</span>
+                        <button class="card-copy" onclick="copyOne(${idx})">COPY</button>
+                    </div>
+                `;
+                box.appendChild(item);
+            });
+
+            rawOutput.value = generatedCards.join('\n');
+            panel.classList.add('show');
+
+            // Scroll to panel
+            panel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===== ACTIONS =====
+        function copyOne(idx) {
+            navigator.clipboard.writeText(generatedCards[idx]);
+            showToast('Copied to clipboard!');
+        }
+
+        function copyAll() {
+            if (!generatedCards.length) return;
+            navigator.clipboard.writeText(generatedCards.join('\n'));
+            showToast(`Copied ${generatedCards.length} cards!`);
+        }
+
+        function saveTXT() {
+            if (!generatedCards.length) return;
+            const blob = new Blob([generatedCards.join('\n')], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cards_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Saved as TXT!');
+        }
+
+        function saveCSV() {
+            if (!rawCards.length) return;
+            let csv = 'Number,Month,Year,CVV\n';
+            rawCards.forEach(c => {
+                csv += `${c.number},${c.month},${c.year},${c.cvv}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cards_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Saved as CSV!');
+        }
+
+        function toggleRaw() {
+            const raw = document.getElementById('rawOutput');
+            raw.classList.toggle('show');
+            if (raw.classList.contains('show')) {
+                raw.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function clearCards() {
+            generatedCards = [];
+            rawCards = [];
+            document.getElementById('cardsPanel').classList.remove('show');
+            document.getElementById('rawOutput').classList.remove('show');
+            document.getElementById('cardsBox').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">💳</div>
+                    <div>Click GENERATE to create cards</div>
+                </div>
+            `;
+            showToast('Cleared!');
+        }
+
+        // ===== INPUT VALIDATION =====
+        document.getElementById('bin').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase().replace(/[^0-9X]/g, '');
+        });
+
+        document.getElementById('cvv').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>
